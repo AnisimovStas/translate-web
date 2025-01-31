@@ -6,8 +6,11 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-build:{
-  outDir: './home/feral/opt/translate/front',
+  base: '/translate/',  // Устанавливаем базовый путь
+
+  build:{
+    assetsDir: 'assets',  // Указываем директорию для статических файлов, например, favicon.ico
+    outDir: './home/feral/opt/translate/front',
 },
   preview:{
     allowedHosts: ['feral.servebeer.com', 'localhost', '127.0.0.1']
