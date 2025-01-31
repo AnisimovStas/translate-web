@@ -1,30 +1,44 @@
-name: Build and Deploy translate web
+name: Build and Deploy translate-web
 
 on:
   push:
     branches:
-      - master
+      - master  # Запускать при пуше в основную ветку
+  pull_request:
+    branches:
+      - master  # Запускать при открытии PR в основную ветку
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Использовать последнюю версию Ubuntu
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      # 1. Клонирование репозитория
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: SSH to server and deploy
-        uses: appleboy/ssh-action@v0.1.6
+      # 2. Установка Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          port: 22
-          script: |
-            cd ~/opt/translate/front
-            git pull origin master
-            nvm i node
-            npm cache clean --force
-            npm ci
-            npm run build
+          node-version: '23'  # Версия Node.js, можно заменить на актуальную
 
+      # 3. Установка зависимостей
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      # 4. Сборка проекта
+      - name: Build the project
+        run: |
+          npm run build  # Выполнить сборку через Vite
+
+      # 5. Деплой на сервер через SSH с использованием пароля
+      - name: Deploy to server
+        run: |
+          sudo apt-get install -y sshpass  # Установка sshpass для использования пароля
+          sshpass -p ${{ secrets.SERVER_PASSWORD }} scp -r ./dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/opt/translate/front
+        env:
+          SSH_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          SSH_USER: ${{ secrets.SERVER_USER }}
+          SSH_HOST: ${{ secrets.SERVER_HOST }}
