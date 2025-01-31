@@ -13,24 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Check Node.js version
-        run: node -v
-
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '23.7'
-
-      - name: Clear npm cache
-        run: npm cache clean --force
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build the app
-        run: npm run build
-
       - name: SSH to server and deploy
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -41,6 +23,8 @@ jobs:
           script: |
             cd ~/opt/translate/front
             git pull origin master
+            node -v
+            npm cache clean --force
             npm ci
             npm run build
 
