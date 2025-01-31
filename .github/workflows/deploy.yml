@@ -1,0 +1,40 @@
+name: Build and Deploy translate web
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-app .
+
+      - name: SSH to server and deploy
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          script: |
+            # Удаляем старый контейнер
+            docker stop translate-container || true
+            docker rm translate-container || true
+            # Стягиваем обновленный код из репозитория (если необходимо)
+            cd ~/opt/translate/front
+            git pull origin master
+            # Собираем новый образ на сервере
+            docker build -t translate-web .
+            # Запускаем новый контейнер
+            docker run -d --name translate-container -p 4173:4173 translate-web
