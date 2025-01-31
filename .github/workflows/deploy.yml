@@ -37,8 +37,8 @@ jobs:
       - name: Deploy to server
         run: |
           sudo apt-get install -y sshpass  # Установка sshpass для использования пароля
-          sshpass -p ${{ secrets.SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/opt/translate/front
+          sshpass -p ${{ secrets.SERVER_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/opt/translate/front
         env:
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          SSH_USER: ${{ secrets.SERVER_USER }}
+          SSH_HOST: ${{ secrets.SERVER_HOST }}
