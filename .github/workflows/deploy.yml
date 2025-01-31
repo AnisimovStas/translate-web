@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '23.x'
+          node-version: '23.7'
 
       - name: Clear npm cache
         run: npm cache clean --force
@@ -39,9 +39,4 @@ jobs:
             git pull origin master
             npm ci
             npm run build
-#             (Optional) Stop and remove old container
-#            docker stop translate-container || true
-#            docker rm translate-container || true
-            # Build and run Docker container
-#            docker build -t translate-web .
-#            docker run -d --name translate-container -p 4173:4173 translate-web
+
