@@ -23,7 +23,7 @@ jobs:
           script: |
             cd ~/opt/translate/front
             git pull origin master
-            node -v
+            nvm i node
             npm cache clean --force
             npm ci
             npm run build
