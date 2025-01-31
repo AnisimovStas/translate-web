@@ -13,30 +13,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v1
-#
-#      - name: Build Docker image
-#        run: |
-#          docker build -t my-app .
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the app
+        run: npm run build
 
       - name: SSH to server and deploy
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_PASSWORD }}
+          key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}  # Убедитесь, что ключ добавлен в Secrets
           port: 22
           script: |
-            # Удаляем старый контейнер
-            docker stop translate-container || true
-            docker rm translate-container || true
-            # Стягиваем обновленный код из репозитория (если необходимо)
             cd ~/opt/translate/front
             git pull origin master
-            npm install
+            npm ci
             npm run build
-#            # Собираем новый образ на сервере
+             (Optional) Stop and remove old container
+#            docker stop translate-container || true
+#            docker rm translate-container || true
+            # Build and run Docker container
 #            docker build -t translate-web .
-#            # Запускаем новый контейнер
 #            docker run -d --name translate-container -p 4173:4173 translate-web
