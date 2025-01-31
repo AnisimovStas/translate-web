@@ -36,7 +36,7 @@ jobs:
             git pull origin master
             npm ci
             npm run build
-             (Optional) Stop and remove old container
+#             (Optional) Stop and remove old container
 #            docker stop translate-container || true
 #            docker rm translate-container || true
             # Build and run Docker container
