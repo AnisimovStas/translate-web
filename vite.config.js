@@ -7,7 +7,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 // https://vite.dev/config/
 export default defineConfig({
 build:{
-  outDir: '~/opt/translate/front',
+  outDir: './home/feral/opt/translate/front',
 },
   preview:{
     allowedHosts: ['feral.servebeer.com', 'localhost', '127.0.0.1']
