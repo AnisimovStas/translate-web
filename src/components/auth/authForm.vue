@@ -20,7 +20,7 @@
     />
 
     <div class="form-actions">
-      <TButton :text="isLogin ? 'Войти' : 'Зарегистрироваться'"/>
+      <TButton @click="sendForm" :text="isLogin ? 'Войти' : 'Зарегистрироваться'"/>
       <p @click="toggleForm">
         {{ isLogin ? 'Нет аккаунта? Зарегестрируйтесь' : 'Уже есть аккаунт? Войти' }}</p>
     </div>
@@ -28,10 +28,10 @@
 </template>
 
 <script setup>
-
 import TInput from "@/components/common/TInput.vue";
 import TButton from "@/components/common/TButton.vue";
 import {ref} from "vue";
+import {sendPostRequest} from "@/utils/responseWrapper.js";
 
 const isLogin = ref(true);
 const email = ref('');
@@ -41,6 +41,26 @@ const password = ref('');
 const toggleForm = () => {
   isLogin.value = !isLogin.value;
 };
+
+
+const sendForm = () => {
+  const body = {
+    username: username.value,
+    password: password.value
+  }
+  let urlPath = "/auth"
+
+  if (isLogin.value) {
+    console.log("отправляю запрос на логин")
+    urlPath += "/sign-in";
+  } else {
+    urlPath += "/sign-up";
+    console.log("отправляю запрос на регистрацию")
+    body.email = email.value;
+  }
+
+  sendPostRequest(urlPath, body);
+}
 
 
 </script>
