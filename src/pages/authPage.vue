@@ -1,7 +1,9 @@
 <template>
   <div class="auth-container">
     <WordsBackground/>
-    <authForm/>
+    <authForm
+    @auth-success="$emit('auth-success')"
+    />
   </div>
 </template>
 

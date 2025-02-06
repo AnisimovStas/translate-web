@@ -17,3 +17,12 @@ export function getErrors() {
     return errors;
 }
 
+
+export function isAuthorized() {
+   return  !!getToken();
+}
+
+export function getToken() {
+   const token =  document.cookie.replace('token=', '');
+   return token;
+}

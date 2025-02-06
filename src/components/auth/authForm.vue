@@ -37,13 +37,14 @@ const isLogin = ref(true);
 const email = ref('');
 const username = ref('');
 const password = ref('');
+const emits = defineEmits(['authSuccess'])
 
 const toggleForm = () => {
   isLogin.value = !isLogin.value;
 };
 
 
-const sendForm = () => {
+const sendForm = async () => {
   const body = {
     username: username.value,
     password: password.value
@@ -59,7 +60,12 @@ const sendForm = () => {
     body.email = email.value;
   }
 
-  sendPostRequest(urlPath, body);
+  const data = await sendPostRequest(urlPath, body);
+  if(data ===null) {
+    return;
+  }
+  document.cookie=`token=${data.token}`;
+  emits('authSuccess')
 }
 
 

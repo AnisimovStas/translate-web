@@ -1,12 +1,18 @@
 import {BASE_URL} from "@/utils/constants.js";
-import {addError} from "@/utils/errors.js";
+import {addError, getToken, isAuthorized} from "@/utils/errors.js";
 
 export async function sendPostRequest(urlPath, body) {
+    const headers = {
+        "Content-Type": "application/json",
+    }
+    if(isAuthorized()){
+        headers["Authorization"] = "Bearer " + getToken();
+    }
+    console.log(headers);
+
     const response = await fetch(BASE_URL + urlPath, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: headers,
         body: JSON.stringify(body),
     });
 
