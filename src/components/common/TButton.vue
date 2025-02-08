@@ -1,13 +1,25 @@
 <template>
-  <button>{{ text }}</button>
+  <button :class="buttonStyles">{{ text }} <slot/> </button>
 </template>
 <script setup>
-defineProps({
+import {computed} from "vue";
+
+const props= defineProps({
   text: String,
+  isDisabled: Boolean,
 })
+
+const buttonStyles = computed(() => {
+  let classes ="button ";
+  if(props.isDisabled) {
+    classes += "button__disabled ";
+  }
+  return classes;
+})
+
 </script>
 <style scoped>
-button {
+.button {
   padding: 1rem 2rem;
   background-color: #007bff;
   color: white;
@@ -18,7 +30,17 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+.button:hover {
   background-color: #0056b3;
 }
+
+.button__disabled {
+  opacity: 0.6;
+  background-color: #555555;
+
+  &:hover {
+    background-color: #555555;
+  }
+}
+
 </style>
