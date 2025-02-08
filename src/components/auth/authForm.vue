@@ -1,5 +1,6 @@
 <template>
-  <div class="form-container">
+  <card>
+    <div class="container">
     <h2>{{ isLogin ? 'Войти' : 'Зарегистрироваться' }}</h2>
 
     <TInput
@@ -24,7 +25,8 @@
       <p @click="toggleForm">
         {{ isLogin ? 'Нет аккаунта? Зарегестрируйтесь' : 'Уже есть аккаунт? Войти' }}</p>
     </div>
-  </div>
+    </div>
+  </card>
 </template>
 
 <script setup>
@@ -32,6 +34,7 @@ import TInput from "@/components/common/TInput.vue";
 import TButton from "@/components/common/TButton.vue";
 import {ref} from "vue";
 import {sendPostRequest} from "@/utils/responseWrapper.js";
+import Card from "@/components/common/card.vue";
 
 const isLogin = ref(true);
 const email = ref('');
@@ -61,10 +64,10 @@ const sendForm = async () => {
   }
 
   const data = await sendPostRequest(urlPath, body);
-  if(data ===null) {
+  if (data === null) {
     return;
   }
-  document.cookie=`token=${data.token}`;
+  document.cookie = `token=${data.token}`;
   emits('authSuccess')
 }
 
@@ -78,13 +81,8 @@ h2 {
   text-align: center;
 }
 
-.form-container {
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 2.5rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+.container {
   width: 500px;
-  backdrop-filter: blur(10px);
 }
 
 p {
@@ -100,18 +98,12 @@ p:hover {
 }
 
 @media (max-width: 768px) {
-  .form-container {
-    padding: 2rem;
-    width: 100%;
+  .container {
+    width: 90vw;
   }
 }
 
 @media (max-width: 480px) {
-  .form-container {
-    width: 100%;
-    padding: 1.5rem;
-  }
-
   button {
     padding: 0.8rem 1.5rem;
   }

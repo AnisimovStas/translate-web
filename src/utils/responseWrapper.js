@@ -10,10 +10,12 @@ export async function sendPostRequest(urlPath, body) {
     }
     console.log(headers);
 
+    const trimmedBody = body instanceof Object ?  JSON.stringify(body) : body;
+
     const response = await fetch(BASE_URL + urlPath, {
         method: "POST",
         headers: headers,
-        body: JSON.stringify(body),
+        body: trimmedBody,
     });
 
     const json = await response.json();
