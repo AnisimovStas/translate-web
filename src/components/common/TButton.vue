@@ -1,18 +1,24 @@
 <template>
-  <button :class="buttonStyles">{{ text }} <slot/> </button>
+  <button :class="buttonStyles">{{ text }}
+    <slot/>
+  </button>
 </template>
 <script setup>
 import {computed} from "vue";
 
-const props= defineProps({
+const props = defineProps({
   text: String,
   isDisabled: Boolean,
+  isActive: Boolean,
 })
 
 const buttonStyles = computed(() => {
-  let classes ="button ";
-  if(props.isDisabled) {
+  let classes = "button ";
+  if (props.isDisabled) {
     classes += "button__disabled ";
+  }
+  if (props.isActive) {
+    classes += "button__active ";
   }
   return classes;
 })
@@ -42,5 +48,15 @@ const buttonStyles = computed(() => {
     background-color: #555555;
   }
 }
+
+.button__active {
+  opacity: 0.6;
+  background-color: #0056b3;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
 
 </style>
